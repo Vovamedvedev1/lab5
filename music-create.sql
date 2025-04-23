@@ -1,10 +1,9 @@
-create table if not exists study.music
-(
-    id   int primary key,
-    name text not null
+CREATE TABLE IF NOT EXISTS music (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL UNIQUE
 );
 
-INSERT INTO study.music (id, name)
+INSERT INTO music (id, name)
     select * from (VALUES (1, 'Bohemian Rhapsody'),
        (2, 'Stairway to Heaven'),
        (3, 'Imagine'),
@@ -25,4 +24,4 @@ INSERT INTO study.music (id, name)
        (18, 'Dont Stop Believin'),
        (19, 'Crazy Train'),
        (20, 'Always')) as new_data
-WHERE NOT EXISTS (SELECT 1 FROM study.music);
+WHERE NOT EXISTS (SELECT 1 FROM music);
