@@ -1,9 +1,12 @@
 package org.example;
 
+import de.vandermeer.asciitable.AsciiTable;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class DataSourceManager {
@@ -57,16 +60,28 @@ public class DataSourceManager {
             ResultSet rs = statement.executeQuery(sqlQuery)) {
             ResultSetMetaData metaData = rs.getMetaData();
             int columnCount = metaData.getColumnCount();
+            String[] headers = new String[columnCount];
             for (int i = 1; i <= columnCount; i++) {
-                System.out.print(metaData.getColumnName(i) + "\t");
+                headers[i - 1] = metaData.getColumnName(i);
             }
-            System.out.println();
+            List<String[]> dataRows = new ArrayList<>();
             while (rs.next()) {
+                String[] row = new String[columnCount];
                 for (int i = 1; i <= columnCount; i++) {
-                    System.out.print(rs.getString(i) + "\t");
+                    row[i - 1] = rs.getString(i);
                 }
-                System.out.println();
+                dataRows.add(row);
             }
+            String[][] data = dataRows.toArray(new String[0][]);
+            AsciiTable at = new AsciiTable();
+            at.addRule();
+            at.addRow(headers);
+            at.addRule();
+            for (String[] row : data) {
+                at.addRow(row);
+                at.addRule();
+            }
+            System.out.println(at.render());
         } catch (SQLException e) {
             System.out.println("Error executing query: " + e.getMessage());
         }
