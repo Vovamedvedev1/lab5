@@ -16,9 +16,9 @@ CREATE TABLE IF NOT EXISTS books(
 );
 
 CREATE TABLE IF NOT EXISTS reader_book(
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
     reader_id INTEGER not null,
-    book_id INTEGER,
+    book_id INTEGER not null,
     FOREIGN KEY (reader_id) REFERENCES readers(id),
-    FOREIGN KEY (book_id) REFERENCES books(id)
+    FOREIGN KEY (book_id) REFERENCES books(id),
+    PRIMARY KEY (reader_id, book_id)
 );
