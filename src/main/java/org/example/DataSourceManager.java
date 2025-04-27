@@ -10,10 +10,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class DataSourceManager {
-    private String dbURL = "jdbc:sqlite:library.db";
+    private static DataSourceManager instance;
+    private final String dbURL = "jdbc:sqlite:library.db";
     private Connection conn = null;
 
-    public DataSourceManager() {
+    private DataSourceManager() {
         try {
             Class.forName("org.sqlite.JDBC");
             conn = DriverManager.getConnection(dbURL);
@@ -23,6 +24,17 @@ public class DataSourceManager {
         } catch (Exception e) {
             System.out.println("Error work with DB: " + e.getMessage());
         }
+    }
+
+    public static DataSourceManager getInstance() {
+        if (instance == null) {
+            synchronized (DataSourceManager.class) {
+                if (instance == null) {
+                    instance = new DataSourceManager();
+                }
+            }
+        }
+        return instance;
     }
 
     public Connection getConnection() {

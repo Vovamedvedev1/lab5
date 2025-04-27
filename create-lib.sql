@@ -14,3 +14,11 @@ CREATE TABLE IF NOT EXISTS books(
     author varchar(100) not null,
     publisher varchar(100) not null
 );
+
+CREATE TABLE IF NOT EXISTS reader_book(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    reader_id INTEGER not null,
+    book_id INTEGER,
+    FOREIGN KEY (reader_id) REFERENCES readers(id),
+    FOREIGN KEY (book_id) REFERENCES books(id)
+);
